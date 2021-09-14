@@ -157,7 +157,7 @@ proc az_gen_sv_intf {LOG top_mod clk_name rst_name } {
 
 
 
-  set intf_hdr [format "interface %s_if (input logic %s);" $mod_name, $clk_name]
+  set intf_hdr [format "interface %s_if (input logic %s);" $mod_name $clk_name]
   puts $LOG "$intf_hdr"
 
   set num_in_ports [llength $::az_gen_ns::in_port_names_l]
