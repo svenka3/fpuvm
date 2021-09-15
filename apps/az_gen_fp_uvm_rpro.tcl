@@ -157,13 +157,18 @@ proc az_gen_sv_intf {LOG top_mod clk_name rst_name } {
 
 
 
+  #puts "Start INTF gen"
+
   set intf_hdr [format "interface %s_if (input logic %s);" $mod_name $clk_name]
   puts $LOG "$intf_hdr"
 
   set num_in_ports [llength $::az_gen_ns::in_port_names_l]
   set cur_port_num 0
+  #puts "in: $num_in_ports"
   while { $cur_port_num < $num_in_ports } { 
     set port_name [lindex $::az_gen_ns::in_port_names_l $cur_port_num]
+    #puts "IN: port: $port_name"
+
     if {$port_name == $clk_name} {
       # Skip clk signal
       incr cur_port_num
@@ -277,9 +282,28 @@ proc az_gen_sv_intf {LOG top_mod clk_name rst_name } {
   set cb_line [format "  endclocking : mon_cb"]
   puts $LOG "$cb_line"
   puts $LOG "  // End of clocking block definition "
-
   # End of clocking block generation
-  # Start modport generation
+  
+  puts $LOG "\n  // Start of init_signals task \n"
+  # Start init_signals generation
+  set intf_hdr [format "  task init_signals ();"]
+  puts $LOG "$intf_hdr"
+  set cur_port_num 0
+  while { $cur_port_num < $num_in_ports } { 
+    set port_name [lindex $::az_gen_ns::in_port_names_l $cur_port_num]
+    if {$port_name == $clk_name} {
+      # Skip clk signal
+      incr cur_port_num
+      continue
+    }
+    set cb_line [format "    %s = 0;" $port_name]
+    set cb_line [format "    drv_cb.%s <= 0;" $port_name]
+    puts $LOG "$cb_line"
+    set cur_port_num [expr $cur_port_num + 1]
+  }
+  set intf_hdr [format "  endtask : init_signals"]
+  puts $LOG "$intf_hdr"
+        
 
   puts $LOG ""
   set intf_hdr [format "endinterface : %s_if" $mod_name]
@@ -364,6 +388,76 @@ proc az_gen_fp_uvm_top_mod {LOG top_mod if_fname clk_name rst_name } {
 }
 
 
+proc az_gen_fp_uvm_test {LOG top_mod rst_sig_name } {
+  set mod_name      $top_mod
+  puts $LOG "// Generating FPUVM Test for module: $mod_name"
+  puts $LOG "// ---------------------------------------------------------"
+  puts $LOG "" 
+  puts $LOG "// Automatically generated from FPUVM app "
+  puts $LOG "// Thanks for using FPUVM see http://fp-uvm.blogspot.com for more"
+  puts $LOG "" 
+  puts $LOG "import uvm_pkg::*;"
+  puts $LOG "`include \"fp_uvm_macros.svh\""
+  puts $LOG "// Import FPUVM Package"   
+  puts $LOG "import fp_uvm_pkg::*;"
+  puts $LOG ""
+  puts $LOG "// Use the base class provided by the FPUVM"
+  set class_hdr [format "class %s_test extends fp_uvm_base_test;" $top_mod]
+  puts $LOG "$class_hdr"
+  puts $LOG "  // Create a handle to the actual interface"
+  set class_hdr [format "  virtual %s_if vif;" $top_mod]
+  puts $LOG ""
+  puts $LOG "$class_hdr"
+  set class_hdr [format "  task reset;" $top_mod]
+  puts $LOG "$class_hdr"
+  puts $LOG "     `fp_uvm_display (\"Start of reset\")"
+  puts $LOG "     `fp_uvm_display (\"Fill in your reset logic here \")"
+  puts $LOG "     this.vif.drv_cb.$rst_sig_name <= 1'b0;"
+  puts $LOG "     this.vif.init_signals();"
+  puts $LOG "     repeat (5) @ (this.vif.drv_cb);"
+  puts $LOG "     this.vif.drv_cb.$rst_sig_name <= 1'b1;"
+  puts $LOG "     repeat (1) @ (this.vif.drv_cb);"
+  puts $LOG "    `fp_uvm_display (\"End of reset\")"
+  puts $LOG "  endtask : reset"
+  puts $LOG ""
+  puts $LOG "  task main ();"
+  puts $LOG "    `fp_uvm_display (\"Start of main\", UVM_MEDIUM)"
+  puts $LOG "    `fp_uvm_display (\"Fill in your main logic here \")"
+  puts $LOG "    // this.vif.drv_cb.inp_1 <= 1'b0;"
+  puts $LOG "    // this.vif.drv_cb.inp_2 <= 'haa;"
+  puts $LOG "    repeat (50) @ (this.vif.drv_cb);"
+  puts $LOG "    `fp_uvm_display (\"End of main\")"
+  puts $LOG "  endtask : main"
+  puts $LOG ""
+  set class_hdr [format "endclass : %s_test" $top_mod]
+  puts $LOG "$class_hdr"
+  puts $LOG ""
+}
+
+proc az_gen_fp_uvm_rvra_do { LOG top_mod} {
+  set mod_name $top_mod
+  puts $LOG "#clear the console"
+  puts $LOG "clear"
+  puts $LOG ""
+  puts $LOG "# create project library and make sure it is empty"
+  puts $LOG "alib work"
+  puts $LOG "#adel -all"
+  puts $LOG ""
+  set rvra_log [format "transcript file fp_uvm_%s_rvra.log" $top_mod]
+  puts $LOG "$rvra_log"
+  puts $LOG "# compile project's source file (alongside the UVM library)"
+  set rvra_log [format "alog \$UVMCOMP -msg 0 -dbg ../fp_uvm/fp_uvm_pkg.sv +incdir+../fp_uvm %s_fp_uvm_top.sv" $top_mod]
+
+  puts $LOG "$rvra_log"
+  puts $LOG ""
+  puts $LOG ""
+  puts $LOG "# run simulation"
+  set run_do [format "asim +access +rw  \$UVMSIM fp_uvm_%s +UVM_VERBOSITY=UVM_FULL" $top_mod]
+  puts $LOG "$run_do"
+  set run_file [format "wave -rec sim:/fp_uvm_%s/* \nrun -all" $top_mod]
+  puts $LOG "$run_file"
+  set $LOG ""
+}  
 
 proc fp_uvm_gen {} {
   ##########################
@@ -377,17 +471,31 @@ proc fp_uvm_gen {} {
 
   set op_if_fname [format "%s_if.sv" $top_mod]
   set op_top_fname [format "%s_fp_uvm_top.sv" $top_mod]
-  set IF_LOG [open $op_if_fname "w"]
-  set TOP_LOG [open $op_top_fname "w"]
-  dump_header $IF_LOG 
-  dump_header $TOP_LOG 
-  az_gen_sv_intf $IF_LOG $top_mod $clk_name $rst_name
-  az_gen_fp_uvm_top_mod $TOP_LOG $top_mod $op_if_fname $clk_name $rst_name 
+  set op_test_fname [format "%s_fp_uvm_test.sv" $top_mod]
+  set op_run_do "fpuvm_run_rvra.do"
 
-  close $IF_LOG
-  close $TOP_LOG
+  set IF_FPTR [open $op_if_fname "w"]
+  set TOP_FPTR [open $op_top_fname "w"]
+  set TEST_FPTR [open $op_test_fname "w"]
+  set DO_FPTR [open $op_run_do "w"]
+
+  dump_header $IF_FPTR 
+  dump_header $TOP_FPTR 
+  dump_header $TEST_FPTR 
+
+  az_gen_sv_intf $IF_FPTR $top_mod $clk_name $rst_name
+  az_gen_fp_uvm_top_mod $TOP_FPTR $top_mod $op_if_fname $clk_name $rst_name 
+  az_gen_fp_uvm_test $TEST_FPTR $top_mod $rst_name
+  az_gen_fp_uvm_rvra_do $DO_FPTR $top_mod
+
+  close $IF_FPTR
+  close $TOP_FPTR
+  close $TEST_FPTR
+  close $DO_FPTR
 
   puts "Successfully generated FPUVM TB & Test for module: $top_mod "
+  puts "See file: $op_if_fname for SystemVerilog Interface "
+  puts "See file: $op_test_fname for FPUVM Test "
   puts "See file: $op_top_fname for FPUVM code"
   puts "Thanks for using FPUVM App "
   puts "Visit http://fp-uvm.blogspot.com for more "
