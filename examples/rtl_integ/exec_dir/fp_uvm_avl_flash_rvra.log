@@ -1,0 +1,201 @@
+alog $UVMCOMP -msg 0 -dbg ../fp_uvm/fp_uvm_pkg.sv +incdir+../fp_uvm avl_flash_fp_uvm_top.sv
+# ALOG: done
+asim +access +rw  $UVMSIM fp_uvm_avl_flash +UVM_VERBOSITY=UVM_FULL
+# VSIM: Warning: Initialized simulation has replaced previously open dataset "sim".
+# VSIM: Simulation has finished.
+# ELBREAD: Elaboration process.
+# ELBREAD: Warning: ELBREAD_0049 Module 'avl_flash_if' does not have a `timescale directive, but previous modules do.
+# ELBREAD: Warning: ELBREAD_0049 Package 'uvm_pkg' does not have a `timescale directive, but previous modules do.
+# ELBREAD: Warning: ELBREAD_0049 Package 'fp_uvm_pkg' does not have a `timescale directive, but previous modules do.
+# ELBREAD: Warning: ELBREAD_0049 Package 'std' does not have a `timescale directive, but previous modules do.
+# ELBREAD: Elaboration time 1.0 [s].
+# KERNEL: Main thread initiated.
+# KERNEL: Kernel process initialization phase.
+# ELAB2: Elaboration final pass...
+# KERNEL: PLI/VHPI kernel's engine initialization done.
+# PLI: Loading library 'C:\Aldec\Riviera-PRO-2021.04-x64\bin\systf.dll'
+# ELAB2: Create instances ...
+# KERNEL: Info: Loading library:  C:/Aldec/Riviera-PRO-2021.04-x64/bin/uvm_1800_2_2017_dpi
+# KERNEL: Time resolution set to 1ps.
+# ELAB2: Create instances complete.
+# SLP: Started
+# SLP: Elaboration phase ...
+# SLP: Elaboration phase ... done : 0.1 [s]
+# SLP: Generation phase ...
+# SLP: Generation phase ... done : 0.3 [s]
+# SLP: Finished : 0.4 [s]
+# SLP: 0 primitives and 13 (86.67%) other processes in SLP
+# SLP: 10 (0.03%) signals in SLP and 65 (0.18%) interface signals
+# ELAB2: Elaboration final pass complete - time: 3.1 [s].
+# KERNEL: SLP loading done - time: 4.5 [s].
+# KERNEL: SLP simulation initialization done - time: 0.0 [s].
+# KERNEL: Kernel process initialization done.
+# Allocation: Simulator allocated 35889 kB (elbread=2359 elab2=28237 kernel=5292 sdf=0)
+# KERNEL: ASDB file was created in location C:/AumzDA/proj/avl_flash_csr/exec_dir/dataset.asdb
+wave -rec sim:/fp_uvm_avl_flash/* 
+# VSIM: 48 object(s) traced.
+run -all
+# KERNEL: UVM_INFO c:/sfm_work/vlib/2021.04.107.8106_64/vlib/uvm-1800.2-2017/src/base/uvm_root.svh(449) @ 0: reporter [UVM/RELNOTES] 
+# KERNEL:   ***********       IMPORTANT RELEASE NOTES         ************
+# KERNEL: 
+# KERNEL:   This implementation of the UVM Library deviates from the 1800.2-2017
+# KERNEL:   standard.  See the DEVIATIONS.md file contained in the release
+# KERNEL:   for more details.
+# KERNEL: 
+# KERNEL: ----------------------------------------------------------------
+# KERNEL: Accellera:1800.2-2017:UVM:1.1
+# KERNEL: 
+# KERNEL: All copyright owners for this kit are listed in NOTICE.txt
+# KERNEL: All Rights Reserved Worldwide
+# KERNEL: ----------------------------------------------------------------
+# KERNEL: 
+# KERNEL:       (Specify +UVM_NO_RELNOTES to turn off this notice)
+# KERNEL: 
+# KERNEL: UVM_INFO @ 0.00 ns: reporter [RNTST] Running test ...
+# KERNEL: UVM_INFO C:/AumzDA/proj/avl_flash_csr/exec_dir/avl_flash_fp_uvm_test.sv(26) @ 0.00 ns: fp_uvm_test [fp_uvm_test] Start of reset
+# KERNEL: UVM_INFO C:/AumzDA/proj/avl_flash_csr/exec_dir/avl_flash_fp_uvm_test.sv(27) @ 0.00 ns: fp_uvm_test [fp_uvm_test] Fill in your reset logic here 
+# KERNEL: UVM_INFO C:/AumzDA/proj/avl_flash_csr/exec_dir/avl_flash_fp_uvm_test.sv(33) @ 55.00 ns: fp_uvm_test [fp_uvm_test] End of reset
+# KERNEL: UVM_INFO C:/AumzDA/proj/avl_flash_csr/fp_uvm/fp_uvm_pkg.sv(103) @ 55.00 ns: fp_uvm_test [fp_uvm_test] Driving stimulus via UVM
+# KERNEL: UVM_INFO C:/AumzDA/proj/avl_flash_csr/exec_dir/avl_flash_fp_uvm_test.sv(37) @ 55.00 ns: fp_uvm_test [fp_uvm_test] Start of main
+# KERNEL: UVM_INFO C:/AumzDA/proj/avl_flash_csr/exec_dir/avl_flash_fp_uvm_test.sv(38) @ 55.00 ns: fp_uvm_test [fp_uvm_test] Fill in your main logic here 
+# KERNEL: UVM_INFO C:/AumzDA/proj/avl_flash_csr/exec_dir/avl_flash_fp_uvm_test.sv(42) @ 555.00 ns: fp_uvm_test [fp_uvm_test] End of main
+# KERNEL: UVM_INFO C:/AumzDA/proj/avl_flash_csr/fp_uvm/fp_uvm_pkg.sv(105) @ 555.00 ns: fp_uvm_test [fp_uvm_test] End of stimulus
+# KERNEL: UVM_INFO c:/sfm_work/vlib/2021.04.107.8106_64/vlib/uvm-1800.2-2017/src/base/uvm_report_server.svh(886) @ 555.00 ns: reporter [UVM/REPORT/SERVER] 
+# KERNEL: --- UVM Report Summary ---
+# KERNEL: 
+# KERNEL: ** Report counts by severity
+# KERNEL: UVM_INFO :   10
+# KERNEL: UVM_WARNING :    0
+# KERNEL: UVM_ERROR :    0
+# KERNEL: UVM_FATAL :    0
+# KERNEL: ** Report counts by id
+# KERNEL: [RNTST]     1
+# KERNEL: [UVM/RELNOTES]     1
+# KERNEL: [fp_uvm_test]     8
+# KERNEL: 
+# RUNTIME: Info: RUNTIME_0068 uvm_root.svh (585): $finish called.
+# KERNEL: Time: 555 ns,  Iteration: 90,  Instance: /fp_uvm_avl_flash,  Process: @INITIAL#fp_uvm_test@.
+# KERNEL: stopped at time: 555 ns
+# VSIM: Simulation has finished. There are no more test vectors to simulate.
+view wave
+help view
+# ~~~~~~~~~~~~~~~~~~~~
+# ~~~ view command ~~~
+# ~~~~~~~~~~~~~~~~~~~~
+# 
+#  Brings a tool window into view, creates a new instance of a document
+#  window, or starts an external viewer.
+# 
+#  The type of the window/viewer must be specified immediately after the
+#  command. If a given window does not yet exist, the command creates it. If
+#  a tool window exists but is hidden by another tab, then the command brings
+#  the window tab on top. If a tool window exists and is visible, then the
+#  command has no effect.
+# 
+#  Commands that create new windows can now be invoked with the -title
+#  argument. The argument assigns a title to a newly opened window. The
+#  window title is displayed in brackets in the window title bar. Window
+#  titles must be unique. Windows with an assigned title can be designated by
+#  that title in subsequent commands. See Designating Framework Windows in
+#  Scripts topic for details.
+# 
+# -=- Syntax -=-
+# 
+#  view advdataflow | assert | callstack | cover | designmanager|dm |
+#  filebrowser | hde | library | mem | process | structure | watch | wave
+# 
+#  or
+# 
+#  view hde [-<type>]
+# 
+# -=- Arguments -=-
+# 
+#  advdataflow
+# 
+#          Creates a new instance of the Dataflow window.
+# 
+#  assert
+# 
+#          Shows the Assertions window. The window is created if it does not
+#          yet exist.
+# 
+#  callstack
+# 
+#          Shows the Call Stack window. The window is created if it does not
+#          yet exist.
+# 
+#  cover
+# 
+#          Shows the Covers window. The window is created if it does not yet
+#          exist.
+# 
+#  designmanager | dm
+# 
+#          Shows the Design Manager window. The window is created if it does
+#          not yet exist.
+# 
+#  filebrowser
+# 
+#          Shows the Filesystem window. The window is created if it does not
+#          yet exist.
+# 
+#  hde
+# 
+#          Opens the HDL Editor window. The type of the document opened in
+#          the HDL Editor can be specified with an optional <type> argument.
+#          If <type> is omitted, the document type is set to text.
+# 
+#  library
+# 
+#          Shows the Libraries window. The window is created if it does not
+#          yet exist.
+# 
+#  mem
+# 
+#          Creates a new instance of the Memory window.
+# 
+#  process
+# 
+#          Shows the Processes window. The window is created if it does not
+#          yet exist.
+# 
+#  structure
+# 
+#          Opens the Hierarchy and Objects windows.
+# 
+#  wave
+# 
+#          Creates a new instance of the waveform window.
+# 
+#  watch
+# 
+#          Shows the Watch window. The window is created if it does not yet
+#          exist.
+# 
+#  -<type>
+# 
+#          Specifies the type of the untitled file to be loaded in the HDL
+#          Editor. The -<type> argument can be used only for view hde
+#          command. The following file types can be specified: -c, -cpp,
+#          -domacro, -edif, -h, -hpp, -perl, -psl, -sdf, -systemverilog,
+#          -systemverilogheader, -sv, -svh, -tcl, -txt, -verilog, and -vhdl.
+# 
+# -=- Examples -=-
+# 
+#    view library
+#    
+# 
+#  Shows the Libraries window.
+# 
+#    view hde -vhdl
+#    
+# 
+#  Creates a new instance of the HDL Editor window; the new file created in
+#  the editor is assumed to be a VHDL file.
+switch
+# SCRIPTER: Error: wrong # args: should be "switch ?-option ...? string ?pattern body ...? ?default body?"
+switch wave
+# SCRIPTER: Error: wrong # args: should be "switch ?-option ...? string ?pattern body ...? ?default body?"
+open
+# SCRIPTER: Error: wrong # args: should be "open fileName ?access? ?permissions?"
+# VSIM: Simulation has finished.
