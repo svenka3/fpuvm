@@ -1,0 +1,67 @@
+set TARGET libaz_fpuvm_app
+# libaz_fpuvm_app
+ccomp -vhpi -o $TARGET -dbg ../vhpi_src/fpuvm_vhdl_pkg_to_sv_app.cpp
+# CCOMP: Warning: C:/AumzDA/proj/fpuvm/apps/vhdl_pkg_to_sv/vhpi_src/fpuvm_vhdl_pkg_to_sv_app.cpp : (128, 33): ../vhpi_src/fpuvm_vhdl_pkg_to_sv_app.cpp: In function 'PLI_VOID azRegisterPkgGenApp_vhpi_fn()':
+# CCOMP: Warning: C:/AumzDA/proj/fpuvm/apps/vhdl_pkg_to_sv/vhpi_src/fpuvm_vhdl_pkg_to_sv_app.cpp : (128, 33): deprecated conversion from string constant to 'char*' [-Wwrite-strings]
+# CCOMP: Warning:    azVhpiForeignData.libraryName = "vhpi";
+# CCOMP: Warning:                                  ^
+# CCOMP: Warning: C:/AumzDA/proj/fpuvm/apps/vhdl_pkg_to_sv/vhpi_src/fpuvm_vhdl_pkg_to_sv_app.cpp : (129, 31): deprecated conversion from string constant to 'char*' [-Wwrite-strings]
+# CCOMP: Warning:    azVhpiForeignData.modelName = "az_fpuvm_vhdl_to_sv_pkg_app";
+# CCOMP: Warning:                                ^
+# CCOMP: Compilation successful.
+acom -dbg ../vhpi_src/fpuvm_apps_pkg.vhdl 
+# ACOM: File: ../vhpi_src/fpuvm_apps_pkg.vhdl
+# ACOM: Compile Package "fpuvm_apps_pkg"
+# ACOM: Compile Package Body "fpuvm_apps_pkg"
+# ACOM: Compile success 0 Errors 0 Warnings  Analysis time :  31.0 [ms]
+createWorklib work
+# ALIB: Library "work" attached.
+# work = C:/AumzDA/proj/fpuvm/apps/vhdl_pkg_to_sv/exec_dir/work/work.lib
+# LIBRARY MANAGER: "work" is now working library.
+# work
+acom -dbg ../test_src/test.vhd
+# ACOM: File: ../test_src/test.vhd
+# ACOM: Compile Package "t_pkg"
+# ACOM: Compile Entity "test"
+# ACOM: Compile Architecture "testcase" of Entity "test"
+# ACOM: Compile success 0 Errors 0 Warnings  Analysis time :  15.0 [ms]
+asim -cdebug test
+# ELBREAD: Elaboration process.
+# ELBREAD: Elaboration time 0.0 [s].
+# KERNEL: Main thread initiated.
+# KERNEL: Kernel process initialization phase.
+# ELAB2: Elaboration final pass...
+# KERNEL: PLI/VHPI kernel's engine initialization done.
+# PLI: Loading library 'C:\Aldec\Riviera-PRO-2021.04-x64\bin\systf.dll'
+# VHPI: Loading library 'libaz_fpuvm_app.dll'
+# ELAB2: Create instances ...
+# KERNEL: Time resolution set to 1ps.
+# ELAB2: Create instances complete.
+# SLP: Started
+# SLP: Elaboration phase ...
+# SLP: Elaboration phase ... skipped, nothing to simulate in SLP mode : 0.0 [s]
+# SLP: Finished : 0.0 [s]
+# ELAB2: Elaboration final pass complete - time: 0.1 [s].
+# KERNEL: Kernel process initialization done.
+# Allocation: Simulator allocated 4693 kB (elbread=427 elab2=4127 kernel=139 sdf=0)
+# KERNEL: ASDB file was created in location C:/AumzDA/proj/fpuvm/apps/vhdl_pkg_to_sv/exec_dir/dataset.asdb
+run -all
+# VHPI: Found Pkg 
+# VHPI: Inside USER Pkg work.t_pkg
+# VHPI: Creating SystemVerilog USER Pkg sv_t_pkg
+# VHPI: 
+# VHPI: 
+# VHPI: ********************************************************************************
+# VHPI: 
+# VHPI: Thanks for using FP-UVM VHDL-2-SystemVerilog Package translator app 
+# VHPI: Converted VHDL package named: t_pkg to SV package named: sv_t_pkg 
+# VHPI: Include the below SystemVerilog package file in your project/file-list 
+# VHPI:  to build on UVM testbench for VHDL 
+# VHPI: 	"sv_t_pkg.sv"
+# VHPI: 
+# VHPI: 
+# VHPI: ********************************************************************************
+# KERNEL: Simulation has finished. There are no more test vectors to simulate.
+endsim
+# VHPI: 
+# VSIM: Simulation has finished.
